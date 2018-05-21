@@ -138,7 +138,7 @@ def getBeyesCtr(data,item):
     data = data.merge(ph_cat,how='left',on=item)
     return data
 
-PH_item_list = ['item_id','item_brand_id','item_city_id','shop_id'] #user_id点击次数太少，未计算平滑转化率，不过据说也有提升
+PH_item_list = ['item_id','item_brand_id','item_city_id','shop_id'] #user_id点击次数太少，未计算平滑转化率
 for item in PH_item_list:
     merge = getBeyesCtr(merge,item)
     print('PH {} finished'.format(item))
