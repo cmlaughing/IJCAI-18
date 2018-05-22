@@ -33,9 +33,10 @@ merge = extract_category(merge)
 #id类特征处理
 from sklearn.preprocessing import LabelEncoder
 
-#删除context_id
+##删除context_id
 merge.drop('context_id',axis=1,inplace=True)
 
+##id类encoder
 encoder_list = ['item_id','item_brand_id','item_city_id','cat_1','user_id','shop_id']
 
 def encoder_category(data):

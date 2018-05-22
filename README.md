@@ -5,17 +5,17 @@
 复赛最终成绩：0.13953 排名 41/5204
 
 # 文件说明 
-data_proprecess.py: 读取原始文件,预处理后生成基础特征文件  
+data_preprocess.py:  读取原始文件,预处理后生成基础特征文件  
 
-gen_click_count_feat.py: 生成用户、商品基础点击统计特征  
+gen_click_count_feat.py:  生成用户、商品基础点击统计特征  
 
-gen_duplicate_click_feat.py: 生成用户重复点击统计、时差特征  
+gen_duplicate_click_feat.py:  生成用户重复点击统计、时差特征  
 
-gen_mean_value_feat.py: 生成均值统计特征  
+gen_mean_value_feat.py:  生成均值统计特征  
 
-gen_item_ctr_feat.py: 生成转化率特征  
+gen_item_ctr_feat.py:  生成转化率特征  
 
-train.py: 模型训练与预测  
+train.py:  模型训练与预测  
 
 # 主要特征（按提升大小排序）
 ## 重复点击特征

@@ -23,27 +23,45 @@ def user_item_cumcount(data,item):
     return data
                                                         
 merge = user_item_cumcount(merge,'item_id')
-#merge = user_item_cumcount(merge,'shop_id')                                                            
-                                                            
+#merge = user_item_cumcount(merge,'shop_id')    
+ 
 #用户-商品/商店当天、小时、分钟点击次数 （全天统计）
 def user_item_count(data,item):
-    user_item_day_count = data.groupby(['user_id','day']
-                                      )[item].nunique().reset_index(name='user_day_active_'+item)
-    data = data.merge(user_item_day_count,on=['user_id','day'],how='left')
-    user_item_hour_count = merge.groupby(['user_id','day','hour']
-                                     )[item].nunique().reset_index(name='user_hour_active_'+item)
-    data = data.merge(user_item_hour_count,on=['user_id','day','hour'],how='left')
-    user_item_minite_count = merge.groupby(['user_id','day','hour','minite']
-                                      )[item].nunique().reset_index(name='user_minite_active_'+item)
-    data = data.merge(user_item_minite_count,on=['user_id','day','hour','minite'],how='left')
-    return data 
-
+    user_item_day_count = data.groupby(['user_id','day',item]
+                                      ).size().reset_index(name='user_day_active_'+item)
+    data = data.merge(user_item_day_count,on=['user_id','day',item],how='left')
+    user_item_hour_count = merge.groupby(['user_id','day','hour',item]
+                                     ).size().reset_index(name='user_hour_active_'+item)
+    data = data.merge(user_item_hour_count,on=['user_id','day','hour',item],how='left')
+    user_item_minite_count = merge.groupby(['user_id','day','hour','minite',item]
+                                      ).size().reset_index(name='user_minite_active_'+item)
+    data = data.merge(user_item_minite_count,on=['user_id','day','hour','minite',item],how='left')
+    return data    
+                                                            
 merge = user_item_count(merge, 'item_id')
 merge = user_item_count(merge, 'shop_id')
 #merge = user_item_count(merge, 'item_brand_id')                                                            
+#merge = user_item_count(merge, 'cat_1')                                                             
+                                                            
+#用户当天、小时、分钟点击不同商品/商店个数
+def user_item_nunique(data,item):
+    user_item_day_nunique = data.groupby(['user_id','day']
+                                      )[item].nunique().reset_index(name='user_day_nunique_'+item)
+    data = data.merge(user_item_day_nunique,on=['user_id','day'],how='left')
+    user_item_hour_nunique = merge.groupby(['user_id','day','hour']
+                                     )[item].nunique().reset_index(name='user_hour_nunique_'+item)
+    data = data.merge(user_item_day_nunique,on=['user_id','day','hour'],how='left')
+    user_item_minite_nunique = merge.groupby(['user_id','day','hour','minite']
+                                      )[item].nunique().reset_index(name='user_minite_nunique_'+item)
+    data = data.merge(user_item_day_nunique,on=['user_id','day','hour','minite'],how='left')
+    return data 
+
+merge = user_item_nunique(merge, 'item_id')
+merge = user_item_nunique(merge, 'shop_id')
+#merge = user_item_count(merge, 'item_brand_id')                                                            
 #merge = user_item_count(merge, 'cat_1')                                                            
 
-#item 当天、小时、分钟点击次数（截止当前时刻）                                                             
+#item 当天、小时、分钟被点击次数（截止当前时刻）                                                             
 def item_cumcount(data,item_list): 
     for item in item_list:
         print(item+' start')
@@ -62,7 +80,7 @@ def item_cumcount(data,item_list):
 item_list = ['item_id','item_brand_id','shop_id']
 merge = item_cumcount(merge,item_list)
                                                             
-#item日均活跃用户
+#item日均活跃用户数
 def day_mean_user(data,item):
     item_day_active_user =data.groupby([item,'day'])['user_id'].nunique().reset_index(name=item+'_day_user_count')
     item_day_mean_user = item_day_active_user.groupby(item)[item+'_day_user_count'].mean().reset_index(name=item+'_day_mean_user')

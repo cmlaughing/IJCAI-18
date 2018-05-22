@@ -56,7 +56,7 @@ class HyperParam(object):
             C.append(click)
         return I, C
     
-    #与版本一相同
+    #与基础版相同
     def update_from_data_by_FPI(self, tries, success, iter_num, epsilon):
         '''estimate alpha, beta using fixed point iteration'''
         for i in range(iter_num):
