@@ -22,7 +22,7 @@ train.py:  模型训练与预测
 　　因为参加过去年的腾讯赛，将其中重复点击的trick思路应用到这个赛题，很自然能够想到可以对用户重复点击商品、品牌、类别、商店、城市、页面等进行挖掘，参考[这里](https://github.com/freelzy/Tencent_Social_Ads)分享的方案，我们对这部分数据标记了点击位置、与首次点击时差、与最后一次点击时差等特征，这一部分特征提升大于3个千分点。
 
 ## 点击次数\个数统计特征
-　　原始特征主要包括商品、用户、商店三部分，从不同的时间粒度（当天、小时、分钟）统计了用户和商品\商店交互、以及用户和商品的各种的cumcount和count,nunique等聚合特征，这部分特征提升大于2个千分点。
+　　原始特征主要包括商品、用户、商店三部分，从不同的时间粒度（当天、小时、分钟）统计了用户和商品\商店交互、以及用户和商品的各种的cumcount、count、nunique等聚合特征，这部分特征提升大于2个千分点。
 
 ## 均值特征
 　　用户、商品、商店属性均值，比如用户点击的商品价格、销量均值，商品\商店每天活跃用户均值等。这部分特征想法来自于[这里](https://github.com/plantsgo/kesci_ctrip/blob/master/ctrip_test_all_data_v31_lgb_feature.py)。
@@ -41,7 +41,7 @@ train.py:  模型训练与预测
 　　这方面并没有很多经验，因为复赛数据只用了第七天训练，所以训练数据不是很大，使用lightgbm默认的0.1学习率得到线下验证结果大概在30秒以内，所以能很快得到新特征的验证效果；当然在前期因为使用了全部数据训练，所以也使用过lgb的特征weight和gain重要性对特征做一些增删；增加特征前可通过均值方差分析特征在线上线下分布是否一致。
 
 # 模型训练
-　　模型方面乏善可陈，主要使用的是lightgbm,队友Seaty尝试过FFM,但表现远落后于lightgbm，可能的原因是用户点击次数太少，用户与商品特征组合过于稀疏，模型无法有效训练，所以最终仅将FFM用于生成stacking特征，同时也采用了全部数据训练得到第七天的stacking特征，stacking第二层同样采用的是lightgbm；由于模型缺乏多样性，最终融合只取得2个万分点的提升。关于stacking,这方面的内容可参考[这里](https://github.com/plantsgo/Rental-Listing-Inquiries/tree/master/model_best_stacking) 。
+　　模型方面乏善可陈，主要使用的是lightgbm,队友Seaty尝试过FFM, 但表现远落后于lightgbm，可能的原因是用户点击次数太少，用户与商品特征组合过于稀疏，模型无法有效训练，所以最终仅将FFM用于生成stacking特征，同时也采用了全部数据训练得到第七天的stacking特征，stacking第二层同样采用的是lightgbm; 由于模型缺乏多样性，最终融合只取得2个万分点的提升; 关于stacking,这方面的内容可参考[这里](https://github.com/plantsgo/Rental-Listing-Inquiries/tree/master/model_best_stacking) 。
 
 # 总结
 　　复赛初期使用的全部数据训练，最高排名第5，有点盲目自信了，没有从数据分布出发去冷静分析训练方式，在用全部数据和七号数据训练两者间摇摆不定，浪费了多次提交机会；由于缺乏完整的比赛经验，比赛中没有做合理的阶段性任务划分，效率不高。  

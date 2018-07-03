@@ -4,9 +4,6 @@ import os
 import lightgbm as lgb
 from sklearn.metrics import log_loss
 
-import numpy as np
-import pandas as pd
-
 merge = pd.read_csv('../feat_file/basic_feat.csv')
 
 #连接特征文件
@@ -25,17 +22,17 @@ keep_columns = [item for item in merge.columns if item not in remove_col]
 train_data = merge[(merge.row_id<train_shape)&(merge.day==7)][keep_columns]
 train_data.drop('row_id',axis=1,inplace=True)
 
-#线下验证还是生成线上结果
+#线下验证 or 线上提交
 online = False
 
 if not online:
     #使用day 7 hour 11 作为线下验证集
-    valid_x = train_data[(train_data.day==7) & (train_data.hour==11-i)]
+    valid_x = train_data[(train_data.hour==11)]
     valid_x.drop(['day','hour'],axis=1,inplace=True)
     valid_y = valid_x.pop('is_trade')
     
     #使用day 7 hour 0~10 数据作为训练集
-    drop_index = train_data[(train_data.day==7) & (train_data.hour>=11-i)].index
+    drop_index = train_data[(train_data.hour>=11)].index
     train_x = train_data.drop(drop_index)
     train_x.drop(['day','hour'],axis=1,inplace=True)
     train_y = train_x.pop('is_trade')
